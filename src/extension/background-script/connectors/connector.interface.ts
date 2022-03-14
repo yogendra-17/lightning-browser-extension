@@ -31,15 +31,13 @@ export interface GetBalanceResponse {
   };
 }
 
-export type SendPaymentResponse =
-  | {
-      data: {
-        preimage: string;
-        paymentHash: string;
-        route: Route;
-      };
-    }
-  | { error: string };
+export type SendPaymentResponse = {
+  data: {
+    preimage: string;
+    paymentHash: string;
+    route: Route;
+  };
+};
 
 export interface SendPaymentArgs {
   paymentRequest: string;
