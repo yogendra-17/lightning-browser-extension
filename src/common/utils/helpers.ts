@@ -1,56 +1,29 @@
-import axios from "axios";
+import * as secp256k1 from "@noble/secp256k1";
 import { bech32 } from "bech32";
+import { ConnectorTransaction } from "~/extension/background-script/connectors/connector.interface";
+import { Sender } from "~/types";
 
-export const normalizeAccountsData = (
-  data: Record<string, { config: unknown }> = {}
-) => {
-  const accountDataKeys = Object.keys(data);
-
-  return accountDataKeys.map((item) => ({
-    title: item,
-    description: data[item].config,
-  }));
-};
-
-export const getFiatFromSatoshi = async (currency: string, satoshi: number) => {
-  const res = await axios.get<{
-    [key: string]: {
-      sell: number;
-    };
-  }>("https://blockchain.info/ticker");
-  const exchangeRate: number = res?.data[currency ?? "USD"]?.sell;
-  const amount = Math.round((satoshi / 100000000) * exchangeRate);
-  return amount;
-};
-
-export const calcFiatFromSatoshi = (rate: string, s: string) => {
-  //making sure we have numbers not strings
-  const satoshi = parseFloat(s);
-  const exchangeRate = parseFloat(rate);
-  // making even more sure we are returning only numbers
-  return +((satoshi / 100000000) * exchangeRate).toFixed(2);
-};
-
-export const sortByFieldAscending = (data: [], field: string) => {
-  return data.sort((a, b) => {
-    const da = a[field],
-      db = b[field];
-    return db - da;
-  });
-};
-
-export const sortByFieldDescending = (data: [], field: string) => {
-  return data.sort((a, b) => {
-    const da = a[field],
-      db = b[field];
-    return da - db;
-  });
-};
-
-export function bech32Decode(str: string) {
+export function bech32Decode(str: string, encoding: BufferEncoding = "utf-8") {
   const { words: dataPart } = bech32.decode(str, 2000);
   const requestByteArray = bech32.fromWords(dataPart);
-  return Buffer.from(requestByteArray).toString();
+  return Buffer.from(requestByteArray).toString(encoding);
+}
+
+export function bech32Encode(prefix: string, hex: string) {
+  const data = secp256k1.etc.hexToBytes(hex);
+  const words = bech32.toWords(data);
+  return bech32.encode(prefix, words, 1000);
+}
+
+export function getHostFromSender(sender: Sender) {
+  // see https://github.com/uBlockOrigin/uBlock-issues/issues/1992
+  // If present, use MessageSender.origin to determine whether the port is
+  // from a privileged page, otherwise use MessageSender.url
+  // MessageSender.origin is more reliable as it is not spoofable by a
+  // compromised renderer.
+  if (sender.origin) return new URL(sender.origin).host;
+  else if (sender.url) return new URL(sender.url).host;
+  else return null;
 }
 
 export async function poll<T>({
@@ -58,11 +31,13 @@ export async function poll<T>({
   validate,
   interval,
   maxAttempts,
+  shouldStopPolling,
 }: {
   fn: () => Promise<T>;
   validate: (value: T) => boolean;
   interval: number;
   maxAttempts: number;
+  shouldStopPolling: () => boolean;
 }) {
   let attempts = 0;
 
@@ -70,6 +45,9 @@ export async function poll<T>({
     resolve: (value: unknown) => void,
     reject: (reason?: Error) => void
   ) => {
+    if (shouldStopPolling()) {
+      return reject(new Error("Polling aborted manually"));
+    }
     const result = await fn();
     attempts++;
 
@@ -83,4 +61,15 @@ export async function poll<T>({
   };
 
   return new Promise(executePoll);
+}
+
+export function mergeTransactions(
+  invoices: ConnectorTransaction[],
+  payments: ConnectorTransaction[]
+): ConnectorTransaction[] {
+  const mergedTransactions = [...invoices, ...payments].sort((a, b) => {
+    return b.settleDate - a.settleDate;
+  });
+
+  return mergedTransactions;
 }

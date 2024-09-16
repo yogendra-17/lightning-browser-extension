@@ -1,0 +1,390 @@
+{
+  "translation": {
+    "welcome": {
+      "set_password": {
+        "errors": {
+          "confirm_password": "Παρακαλώ επιβεβαιώστε τον κωδικό σας.",
+          "enter_password": "Παρακαλώ εισάγετε ένα κωδικό.",
+          "mismatched_password": "Οι κωδικοί δεν ταιριάζουν."
+        },
+        "choose_password": {
+          "label": "Επιλέξτε ένα κωδικό ξεκλειδώματος:"
+        },
+        "confirm_password": {
+          "label": "Ας επιβεβαιώσουμε ότι τον πληκτρολογήσατε σωστά:"
+        }
+      },
+      "test_connection": {
+        "initializing": "Αρχικοποίηση του λογαριασμού σας. Παρακαλώ περιμένετε, αυτό μπορεί να πάρει ένα λεπτό...",
+        "review_connection_details": "Παρακαλώ εξετάστε τις λεπτομέρειες σύνδεσης σας.",
+        "contact_support": "Αν το χρειάζεστε παρακαλώ επικοινωνήστε με το support@getalby.com",
+        "actions": {
+          "delete_edit_account": "Διαγράψτε τον μη έγκυρο λογαριασμό και εισάγετε ξανά τα στοιχεία"
+        },
+        "ready": "Φανταστικά, μπορείτε να ξεκινήσετε!",
+        "connection_error": "Σφάλμα σύνδεσης",
+        "connection_taking_long": "Η προσπάθεια σύνδεσης πήρε περισσότερο από το αναμενόμενο... Είναι τα στοιχεία σας σωστά; Υπάρχει πρόσβαση στον κόμβο σας;"
+      },
+      "pin_extension": {
+        "title": "Καρφιτσώστε την επέκταση σας Alby",
+        "description": "Είστε σχεδόν έτοιμοι. Για δική σας ευκολία στην χρήση του Alby, μην ξεχάσετε να το καρφιτσώσετε στην γραμμή εργαλείων του προγράμματος περιήγησης ιστού:"
+      }
+    },
+    "choose_path": {
+      "other": {
+        "title": "Άλλα πορτοφόλια"
+      },
+      "alby": {
+        "title": "Λογαριασμός Alby"
+      }
+    },
+    "alby": {
+      "pre_connect": {
+        "set_password": {
+          "choose_password": {
+            "label": "Κωδικός"
+          },
+          "errors": {
+            "mismatched_password": "Οι κωδικοί δεν ταιριάζουν.",
+            "enter_password": "Παρακαλώ εισάγετε έναν κωδικό.",
+            "confirm_password": "Παρακαλώ επιβεβαιώστε τον κωδικός σας."
+          },
+          "confirm_password": {
+            "label": "Επιβεβαίωση κωδικού πρόσβασης"
+          }
+        }
+      }
+    },
+    "choose_connector": {
+      "lnbits": {
+        "title": "LNbits"
+      },
+      "lndhub_go": {
+        "title": "LNDHub",
+        "page": {
+          "title": "Σύνδεση σε LNDHub"
+        }
+      },
+      "citadel": {
+        "title": "Citadel",
+        "url": {
+          "label": "Citadel URL",
+          "placeholder": "http://citadel.local"
+        },
+        "page": {
+          "title": "Σύνδεση σε κόμβο <0>Citadel</0>"
+        },
+        "password": {
+          "label": "Κωδικός Citadel"
+        }
+      },
+      "startos": {
+        "title": "StartOS"
+      },
+      "btcpay": {
+        "title": "BTCPay Server"
+      },
+      "lnd": {
+        "title": "LND",
+        "page": {
+          "title": "Σύνδεση στον LND κόμβο σας"
+        }
+      },
+      "eclair": {
+        "title": "Eclair",
+        "url": {
+          "placeholder": "http://localhost:8080",
+          "label": "Eclair URL"
+        },
+        "password": {
+          "label": "Κωδικός Eclair"
+        }
+      },
+      "commando": {
+        "port": {
+          "label": "Θύρα"
+        },
+        "pubkey": {
+          "label": "Δημόσιο κλειδί"
+        },
+        "title": "Core Lightning",
+        "page": {
+          "title": "Σύνδεση στον Core Lightning κόμβο σας"
+        }
+      },
+      "title": "Σύνδεση με πορτοφόλι Lightning",
+      "description": "Σύνδεση σε εξωτερικό πορτοφόλι lightning ή σε κόμβο",
+      "umbrel": {
+        "page": {
+          "title": "Σύνδεση σε κόμβο <0>Umbrel</0>"
+        },
+        "title": "Umbrel"
+      },
+      "umbrel_lightning_node": {
+        "title": "Κόμβος Lightning"
+      },
+      "galoy": {
+        "actions": {
+          "login": "Σύνδεση"
+        },
+        "phone_number": {
+          "label": "Εισάγετε τον αριθμό τηλεφώνου σας"
+        },
+        "errors": {
+          "setup_failed": "Η ρύθμιση απέτυχε"
+        }
+      },
+      "raspiblitz": {
+        "page": {
+          "title": "Σύνδεση στον <0>RaspiBlitz<0> κόμβο σας"
+        },
+        "title": "RaspiBlitz"
+      },
+      "mynode": {
+        "title": "myNode",
+        "page": {
+          "title": "Σύνδεση σε <0>myNode</0>"
+        }
+      },
+      "voltage": {
+        "title": "Voltage"
+      }
+    },
+    "distributions": {
+      "umbrel": {
+        "name": "Umbrel"
+      },
+      "raspiblitz": {
+        "name": "Raspiblitz"
+      },
+      "btcpay": {
+        "name": "BTCPay"
+      },
+      "startos": {
+        "name": "StartOS"
+      },
+      "citadel": {
+        "name": "Citadel"
+      },
+      "mynode": {
+        "name": "myNode"
+      }
+    },
+    "accounts": {
+      "account_view": {
+        "mnemonic": {
+          "backup": {
+            "protocols": {
+              "nostr": "Nostr"
+            }
+          },
+          "generate": {
+            "title": "Δημιουργία νέου πρωτεύοντος κλειδιού"
+          },
+          "import": {
+            "title": "Εισαγωγή του πρωτεύοντος κλειδιού σας"
+          }
+        },
+        "nostr": {
+          "settings": {
+            "label": "Ρυθμίσεις Nostr",
+            "title": "Ρυθμίσεις Nostr"
+          },
+          "title": "Nostr",
+          "setup": {
+            "new": {
+              "label": "Δημιουργία νέου λογαριασμού Nostr"
+            }
+          },
+          "public_key": {
+            "label": "Δημόσιο κλειδί Nostr"
+          },
+          "private_key": {
+            "title": "Διαχείριση του Nostr ιδιωτικού κλειδιού σας",
+            "label": "Ιδιωτικό κλειδί Nostr",
+            "successfully_removed": "Το ιδιωτικό κλειδί Nostr απομακρύνθηκε με επιτυχία.",
+            "subtitle": "Επικόλληση του nostr ιδιωτικού κλειδιού σας ή δημιουργήστε ένα νέο. <0>Μάθετε περισσότερα»</0>",
+            "success": "Το ιδιωτικό κλειδί Nostr κρυπτογραφήθηκε & αποθηκεύτηκε με επιτυχία."
+          },
+          "generate_keys": {
+            "screen_reader": "Δημιουργήστε ένα νέο κλειδί Nostr για τον λογαριασμό σας",
+            "title": "Δημιουργήστε ένα νέο κλειδί Nostr"
+          }
+        },
+        "export": {
+          "your_ln_address": "Η Lightning διεύθυνση σας:",
+          "screen_reader": "Εξαγωγή λεπτομερειών λογαριασμού"
+        },
+        "actions": {
+          "export": "Εξαγωγή"
+        }
+      }
+    },
+    "nostr_enable": {
+      "title": "Σύνδεση στο Nostr"
+    },
+    "lnurlredeem": {
+      "actions": {
+        "withdraw": "Ανάληψη"
+      },
+      "input": {
+        "placeholder": "LNURL..."
+      }
+    },
+    "receive": {
+      "amount": {
+        "placeholder": "Ποσό σε Satoshi...",
+        "label": "Ποσό"
+      },
+      "description": {
+        "label": "Περιγραφήή"
+      },
+      "actions": {
+        "bitcoin_address": {
+          "title": "Διεύθυνση Bitcoin"
+        }
+      },
+      "payment": {
+        "waiting": "αναμονή για πληρωμή..."
+      }
+    },
+    "settings": {
+      "name": {
+        "title": "Όνομα"
+      },
+      "currency": {
+        "title": "Νόμισμα"
+      },
+      "language": {
+        "title": "Γλώσσα"
+      },
+      "theme": {
+        "options": {
+          "system": "Σύστημα",
+          "dark": "Σκοτεινό",
+          "light": "Φωτεινό"
+        },
+        "title": "Θέμα"
+      },
+      "camera_access": {
+        "title": "Πρόσβαση κάμερας",
+        "allow": "Να επιτρέπεται η πρόσβαση στην κάμερα",
+        "subtitle": "Για σάρωση κωδικών QR",
+        "granted": "Έχει δοθεί άδεια"
+      },
+      "title": "Ρυθμίσεις",
+      "personal_data": {
+        "title": "Προσωπικά δεδομένα"
+      },
+      "change_password": {
+        "submit": {
+          "label": "Αλλαγή"
+        }
+      }
+    },
+    "home": {
+      "default_view": {
+        "see_all": "Δείτε τα όλα"
+      },
+      "actions": {
+        "enable_now": "Ενεργοποίηση τώρα"
+      }
+    },
+    "webbtc_enable": {
+      "title": "Σύνδεση στο WebBTC"
+    },
+    "lnurlpay": {
+      "comment": {
+        "label": "Σχόλιο"
+      },
+      "success": "Επιτυχία, η πληρωμή στάλθηκε!",
+      "amount": {
+        "label": "Ποσό"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "name": {
+        "label": "Όνομα"
+      }
+    },
+    "lnurlwithdraw": {
+      "title": "Ανάληψη",
+      "amount": {
+        "label": "Ποσό"
+      },
+      "content_message": {
+        "heading": "Ποσό"
+      }
+    },
+    "liquid_enable": {
+      "title": "Σύνδεση στο Liquid"
+    },
+    "send": {
+      "input": {
+        "label": "Παραλήπτης"
+      },
+      "title": "Αποστολή"
+    },
+    "unlock": {
+      "help_contact": {
+        "part2": "Υποστήριξη Alby"
+      },
+      "unlock_password": "Ο κωδικός ξεκλειδώματος σας",
+      "errors": {
+        "invalid_password": "Μη έγκυρος κωδικός ξεκλειδώματος"
+      },
+      "unlock_to_continue": "Ξεκλειδώστε για συνεχίσετε"
+    },
+    "alby_enable": {
+      "title": "Σύνδεση στο Alby"
+    },
+    "transactions": {
+      "title": "Συναλλαγές"
+    },
+    "lnurlauth": {
+      "success": "Επιτυχής σύνδεση  στο {{name}}",
+      "submit": "Είσοδος"
+    }
+  },
+  "common": {
+    "confirm_password": "Επιβεβαίωση κωδικού",
+    "actions": {
+      "edit": "Επεξεργασία",
+      "download": "Λήψη",
+      "send": "Αποστολή",
+      "delete": "Διαγραφή",
+      "back": "Πίσω",
+      "continue": "Συνέχεια",
+      "more": "Περισσότερα",
+      "next": "Επόμενο",
+      "confirm": "Επιβεβαίωση",
+      "lock": "Κλείδωμα",
+      "transactions": "Συναλλαγές",
+      "export": "Εξαγωγή",
+      "disconnect": "Αποσύνδεση"
+    },
+    "message": "Μήνυμα",
+    "help": "Βοήθεια",
+    "error": "Σφάλμα",
+    "description": "Περιγραφή",
+    "optional": "Προαιρετικό",
+    "wallet": "Πορτοφόλι",
+    "password": "Κωδικός",
+    "amount": "Ποσό",
+    "copied": "Έγινε αντιγραφή!",
+    "discover": "Ανακάλυψε",
+    "pasted": "Έγινε επικόλληση!",
+    "accounts": "Λογαριασμοί",
+    "settings": "Ρυθμίσεις",
+    "success": "Επιτυχία",
+    "description_full": "Πλήρης περιγραφή"
+  },
+  "components": {
+    "transactions_table": {
+      "boostagram": {
+        "totalAmount": "Συνολικό ποσό"
+      }
+    }
+  }
+}

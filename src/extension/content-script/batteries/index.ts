@@ -1,16 +1,24 @@
-import api from "../../../common/lib/api";
-// import GitHubRepo from "./GitHubRepo";
+import api from "~/common/lib/api";
+
+import GeyserProject from "./GeyserProject";
+import GitHub from "./GitHub";
+import LinkTree from "./LinkTree";
+import Medium from "./Medium";
+import Mixcloud from "./Mixcloud";
 import Monetization from "./Monetization";
-import Twitter from "./Twitter";
-import YouTubeVideo from "./YouTubeVideo";
-import YouTubeChannel from "./YouTubeChannel";
 import Peertube from "./Peertube";
 import Reddit from "./Reddit";
-// import YouTubeChannel from "./YouTubeChannel";
+import SoundCloud from "./SoundCloud";
+import StackOverflow from "./StackOverflow";
+import Substack from "./Substack";
+import Twitch from "./Twitch";
+import Twitter from "./Twitter";
+import Vida from "./Vida";
 import VimeoVideo from "./VimeoVideo";
+import YouTubeChannel from "./YouTubeChannel";
+import YouTubeVideo from "./YouTubeVideo";
 
 // Order is important as the first one for which the URL matches will be used
-// Monetization must likely be always the last one
 const enhancements = [
   Twitter,
   Reddit,
@@ -18,6 +26,18 @@ const enhancements = [
   YouTubeChannel,
   Peertube,
   VimeoVideo,
+  LinkTree,
+  Medium,
+  Mixcloud,
+  GitHub,
+  SoundCloud,
+  StackOverflow,
+  Substack,
+  GeyserProject,
+  Vida,
+  Twitch,
+
+  // Monetization must likely always be the last one as this is the fallback option if no specific enhancement matched
   Monetization,
 ];
 

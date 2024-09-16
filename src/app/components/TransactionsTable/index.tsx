@@ -1,108 +1,127 @@
-import {
-  PlusIcon,
-  MinusIcon,
-  CaretDownIcon,
-} from "@bitcoin-design/bitcoin-icons-react/filled";
-import { Disclosure } from "@headlessui/react";
+import Loading from "@components/Loading";
+import { PopiconsArrowDownSolid, PopiconsArrowUpSolid } from "@popicons/react";
 
-import { Transaction } from "../../../types";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import Badge from "../Badge";
+import TransactionModal from "~/app/components/TransactionsTable/TransactionModal";
+import { useSettings } from "~/app/context/SettingsContext";
+import { classNames } from "~/app/utils";
+import { Transaction } from "~/types";
 
-type Props = {
-  transactions: Transaction[];
+export type Props = {
+  transactions: Transaction[] | null | undefined;
+  loading?: boolean;
+  noResultMsg?: string;
 };
 
-export default function TransactionsTable({ transactions }: Props) {
-  function renderIcon(type: string) {
-    function getIcon() {
-      const iconClasses = "h-3 w-3";
-      switch (type) {
-        case "received":
-          return <PlusIcon className={iconClasses} />;
-        case "sent":
-        case "sending":
-          return <MinusIcon className={iconClasses} />;
-      }
-    }
+export default function TransactionsTable({
+  transactions,
+  noResultMsg,
+  loading = false,
+}: Props) {
+  const { getFormattedSats, getFormattedInCurrency } = useSettings();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [transaction, setTransaction] = useState<Transaction | undefined>();
+  const { t } = useTranslation("components", {
+    keyPrefix: "transactions_table",
+  });
 
-    return (
-      <div className="flex justify-center items-center w-6 h-6 border-2 border-gray-200 rounded-full dark:text-white">
-        {getIcon()}
-      </div>
-    );
+  function openDetails(transaction: Transaction) {
+    setTransaction(transaction);
+    setModalOpen(true);
+  }
+
+  function getTransactionType(tx: Transaction): "incoming" | "outgoing" {
+    return [tx.type && "sent"].includes(tx.type) ? "outgoing" : "incoming";
   }
 
   return (
-    <div className="shadow overflow-hidden rounded-lg">
-      <div className="bg-white divide-y divide-gray-200 dark:bg-gray-700">
-        {transactions.map((tx) => (
-          <div key={tx.id} className="px-3 py-2">
-            <Disclosure>
-              {({ open }) => (
-                <>
-                  <div className="flex">
-                    <div className="flex items-center shrink-0 mr-3">
-                      {tx.type && renderIcon(tx.type)}
-                    </div>
-                    <div className="overflow-hidden mr-3">
-                      <div className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                        {tx.title}
+    <div>
+      {loading ? (
+        <div className="w-full flex flex-col items-center">
+          <Loading />
+        </div>
+      ) : !transactions?.length ? (
+        <p className="text-gray-500 dark:text-neutral-400 text-center">
+          {t("no_transactions")}
+        </p>
+      ) : (
+        <>
+          {transactions?.map((tx) => {
+            const type = getTransactionType(tx);
+
+            return (
+              <div
+                key={tx.id}
+                className="-mx-2 px-2 py-2 hover:bg-gray-100 dark:hover:bg-surface-02dp cursor-pointer rounded-md"
+                onClick={() => openDetails(tx)}
+              >
+                <div className="flex gap-3">
+                  <div className="flex items-center">
+                    {type == "outgoing" ? (
+                      <div className="flex justify-center items-center bg-orange-100 dark:bg-orange-950 rounded-full w-8 h-8">
+                        <PopiconsArrowUpSolid className="w-5 h-5 text-orange-400 dark:text-amber-600 stroke-[1px] stroke-orange-400 dark:stroke-amber-600" />
                       </div>
-                      <p className="text-xs text-gray-500 capitalize dark:text-gray-400">
-                        {tx.type}
-                      </p>
-                    </div>
-                    {tx.badges && (
-                      <div className="ml-6 space-x-3">
-                        {tx.badges.map((badge, i) => (
-                          <Badge
-                            key={badge.label}
-                            label={badge.label}
-                            color={badge.color}
-                            textColor={badge.textColor}
-                          />
-                        ))}
+                    ) : (
+                      <div className="flex justify-center items-center bg-green-100 dark:bg-emerald-950 rounded-full w-8 h-8">
+                        <PopiconsArrowDownSolid className="w-5 h-5 text-green-500 dark:text-emerald-500 stroke-[1px] stroke-green-400 dark:stroke-emerald-500" />
                       </div>
                     )}
-                    <div className="flex ml-auto text-right space-x-3 shrink-0">
-                      <div>
-                        <p className="text-sm font-medium dark:text-white">
-                          {[tx.type && "sent", "sending"].includes(tx.type)
-                            ? "-"
-                            : "+"}
-                          {tx.totalAmount} sat
+                  </div>
+                  <div className="overflow-hidden mr-3">
+                    <div className="text-sm font-medium text-black truncate dark:text-white">
+                      <p className="truncate">
+                        {tx.title ||
+                          tx.boostagram?.message ||
+                          (type == "incoming" ? t("received") : t("sent"))}
+                      </p>
+                    </div>
+                    <p className="text-xs text-gray-400 dark:text-neutral-500">
+                      {tx.date}
+                    </p>
+                  </div>
+                  <div className="flex ml-auto text-right space-x-3 shrink-0 dark:text-white">
+                    <div>
+                      <p
+                        className={classNames(
+                          "text-sm",
+                          type == "incoming"
+                            ? "text-green-600 dark:text-emerald-500"
+                            : "text-orange-600 dark:text-amber-600"
+                        )}
+                      >
+                        {type == "outgoing" ? "-" : "+"}{" "}
+                        {!tx.displayAmount
+                          ? getFormattedSats(tx.totalAmount)
+                          : getFormattedInCurrency(
+                              tx.displayAmount[0],
+                              tx.displayAmount[1]
+                            )}
+                      </p>
+
+                      {!!tx.totalAmountFiat && (
+                        <p className="text-xs text-gray-400 dark:text-neutral-600">
+                          ~{tx.totalAmountFiat}
                         </p>
-                        <p className="text-xs text-gray-400">{tx.date}</p>
-                      </div>
-                      <Disclosure.Button className="block h-0 mt-2 text-gray-500 hover:text-black dark:hover:text-white transition-color duration-200">
-                        <CaretDownIcon
-                          className={`${open ? "rotate-180" : ""} w-5 h-5`}
-                        />
-                      </Disclosure.Button>
+                      )}
                     </div>
                   </div>
-                  <Disclosure.Panel>
-                    <div className="mt-1 ml-9 text-xs text-gray-500 dark:text-gray-400">
-                      {tx.description}
-                      {tx.preimage && (
-                        <p className="truncate">Preimage: {tx.preimage}</p>
-                      )}
-                      {tx.location ? (
-                        <a href={tx.location} target="_blank" rel="noreferrer">
-                          {tx.location}
-                        </a>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
-          </div>
-        ))}
-      </div>
+                </div>
+              </div>
+            );
+          })}
+          {transaction && (
+            <TransactionModal
+              transaction={transaction}
+              isOpen={modalOpen}
+              onClose={() => {
+                setModalOpen(false);
+              }}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }

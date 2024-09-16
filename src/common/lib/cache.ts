@@ -1,6 +1,5 @@
 import browser from "webextension-polyfill";
-
-import type { AccountInfo } from "../../types";
+import type { AccountInfo } from "~/types";
 
 export const getAccountsCache = async () => {
   let accountsCache: { [id: string]: AccountInfo } = {};

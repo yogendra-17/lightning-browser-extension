@@ -3,24 +3,20 @@ import { Link } from "react-router-dom";
 type Props = {
   to: string;
   title: string;
-  description?: string;
   logo?: string;
 };
 
-export default function LinkButton({ to, title, description, logo }: Props) {
+export default function LinkButton({ to, title, logo }: Props) {
   return (
-    <Link to={to} className="block">
-      <div className="p-4 bg-white dark:bg-gray-800 h-96 text-center shadow-lg overflow-hidden border-b border-gray-200 dark:border-gray-500 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200">
-        <div className="my-12">
-          <img src={logo} alt="logo" className="inline rounded-3xl w-32" />
+    <Link to={to}>
+      <div className="p-10 h-72 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-surface-02dp text-center overflow-hidden rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 transition duration-200 flex flex-col justify-center space-y-4">
+        <div>
+          <img src={logo} alt="logo" className="inline rounded-3xl w-32 mb-6" />
         </div>
         <div>
-          <span className="block dark:text-white text-lg">{title}</span>
-          {description && (
-            <span className="text-sm text-gray-500 dark:text-gray-300">
-              {description}
-            </span>
-          )}
+          <span className="block dark:text-white text-lg font-medium">
+            {title}
+          </span>
         </div>
       </div>
     </Link>

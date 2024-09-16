@@ -1,19 +1,31 @@
 import { Menu } from "@headlessui/react";
+import { classNames } from "~/app/utils/index";
 
 type Props = {
   children: React.ReactNode;
+  disabled?: boolean;
   onClick: () => void;
+  title?: string;
 };
 
-function MenuItemButton({ children, onClick }: Props) {
+function MenuItemButton({
+  children,
+  disabled = false,
+  onClick,
+  title = "",
+}: Props) {
   return (
     <Menu.Item>
       {({ active }) => (
         <button
-          className={`${
-            active ? "bg-gray-100" : ""
-          } flex items-center cursor-pointer text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600`}
+          className={classNames(
+            active ? "bg-gray-50 dark:bg-surface-02dp" : "",
+            disabled ? "cursor-not-allowed" : "cursor-pointer",
+            "flex items-center w-full p-4 text-sm text-gray-800 dark:text-neutral-200 whitespace-nowrap"
+          )}
+          disabled={disabled}
           onClick={onClick}
+          title={title}
         >
           {children}
         </button>

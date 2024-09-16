@@ -1,8 +1,12 @@
+import { Message } from "~/types";
+
 import state from "../../state";
-import { Message } from "../../../../types";
 
 const checkPayment = async (message: Message) => {
-  if (typeof message.args.paymentHash !== "string") {
+  if (
+    typeof message.args.paymentHash !== "string" ||
+    !message.args.paymentHash
+  ) {
     return {
       error: "Payment hash missing.",
     };

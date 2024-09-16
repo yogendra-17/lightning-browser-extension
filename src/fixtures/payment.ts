@@ -1,0 +1,36 @@
+import type { DbPayment } from "~/types";
+
+export const paymentsFixture: DbPayment[] = [
+  {
+    accountId: "12345",
+    allowanceId: "3",
+    createdAt: "123456",
+    description: "A blue bird?!",
+    destination: "Space",
+    host: "getalby.com",
+    id: 4,
+    location: "https://www.getalby.com",
+    name: "Alby",
+    paymentHash: "123",
+    paymentRequest: "123",
+    preimage: "123",
+    totalAmount: 1000,
+    totalFees: 111,
+  },
+  {
+    accountId: "12345",
+    allowanceId: "3",
+    createdAt: "123456",
+    description: "A yellow bird?!",
+    destination: "Space",
+    host: "getalby.com",
+    id: 5,
+    location: "https://www.getalby.com",
+    name: "Alby",
+    paymentHash: "123",
+    paymentRequest: "123",
+    preimage: "123",
+    totalAmount: "2000",
+    totalFees: 222,
+  },
+];

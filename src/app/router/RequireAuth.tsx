@@ -1,14 +1,12 @@
 import { Navigate, useLocation } from "react-router-dom";
-
-import { useAuth } from "../context/AuthContext";
-import Loading from "../components/Loading";
+import { useAccount } from "~/app/context/AccountContext";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  const auth = useAuth();
+  const auth = useAccount();
   const location = useLocation();
 
-  if (auth.loading) {
-    return <Loading />;
+  if (auth.statusLoading) {
+    return null;
   }
 
   if (!auth.account) {

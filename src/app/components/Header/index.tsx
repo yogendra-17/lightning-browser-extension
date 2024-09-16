@@ -1,17 +1,19 @@
 type Props = {
-  title: string;
   headerLeft?: React.ReactNode;
   headerRight?: React.ReactNode;
+  children: React.ReactNode;
 };
 
-function Header({ title, headerLeft, headerRight }: Props) {
+function Header({ children, headerLeft, headerRight }: Props) {
   return (
-    <div className="flex justify-between bg-white px-4 py-2 border-b border-gray-200 dark:bg-gray-700 dark:border-gray-500">
-      <div className="flex items-center">
-        {headerLeft && <div className="mr-3">{headerLeft}</div>}
-        <h1 className="text-lg font-medium dark:text-white">{title}</h1>
+    <div className="bg-white py-[6px] border-b border-gray-200 dark:bg-surface-01dp dark:border-neutral-700">
+      <div className="flex justify-between items-center container max-w-screen-lg px-4 mx-auto">
+        <div className="w-8 h-8 mr-3">{headerLeft}</div>
+        <h1 className="text-lg font-medium dark:text-white overflow-hidden">
+          {children}
+        </h1>
+        <div className="w-8 h-8 ml-3">{headerRight}</div>
       </div>
-      {headerRight}
     </div>
   );
 }

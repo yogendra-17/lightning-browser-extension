@@ -1,5 +1,5 @@
 import getOriginData from "../originData";
-import setLightningData from "../setLightningData";
+import { setLightningData } from "./helpers";
 
 declare global {
   interface Window {
@@ -7,11 +7,11 @@ declare global {
   }
 }
 
-const urlMatcher = /^https:\/\/twitter\.com\/(\w+).*/;
+const urlMatcher = /^https:\/\/(mobile.)?(twitter|x)\.com\/(\w+).*/;
 
 function getUsername() {
   const matchData = document.location.toString().match(urlMatcher);
-  if (matchData) return matchData[1];
+  if (matchData) return matchData[3];
   return "";
 }
 
@@ -38,14 +38,23 @@ function getUserData(username: string) {
     const element = document.querySelector(
       '[data-testid="primaryColumn"] [data-testid="UserDescription"]'
     );
-    const imageUrl = document.querySelector<HTMLImageElement>(
-      `[data-testid="primaryColumn"] a[href="/${username}/photo" i] img`
-    )?.src;
+    const imageUrl = document.querySelectorAll<HTMLImageElement>(
+      `[data-testid="primaryColumn"] a[href="/${username}/photo" i] img,
+       [data-testid="primaryColumn"] a[href="/${username}/nft" i] img` // for nft profile
+    )?.[0].src;
+
+    const location = document.querySelector<HTMLElement>(
+      `[data-testid="primaryColumn"] [data-testid="UserLocation"]`
+    );
+    const name = document.querySelector<HTMLElement>(
+      `[data-testid="primaryColumn"] h2`
+    );
     if (element && imageUrl) {
       return {
         element,
+        location,
         imageUrl,
-        name: document.title,
+        name: name?.textContent || document.title,
       };
     }
   } else if (isOnTweet(username)) {
@@ -57,9 +66,8 @@ function getUserData(username: string) {
     if (element && imageUrl) {
       return {
         element,
-        name: `${
-          profileLinks[1].querySelector("span")?.textContent
-        } (@${username}) / Twitter`,
+        name: `${profileLinks[1].querySelector("span")
+          ?.textContent} (@${username}) / Twitter`,
         imageUrl,
       };
     }
@@ -74,7 +82,6 @@ function battery(): void {
     let userData;
     if ((userData = getUserData(username))) {
       observer.disconnect();
-      console.log({ userData });
 
       let match;
       let recipient;
@@ -85,9 +92,11 @@ function battery(): void {
         recipient = match[1];
       } else {
         // if we did not find anything let's look for an ⚡ emoji
-        const zapElements = userData.element.querySelectorAll(
-          'img[src*="26a1.svg"]'
-        );
+        const zapElements = new Set([
+          ...userData.element.querySelectorAll('img[src*="26a1.svg"]'),
+          ...(userData.location?.querySelectorAll('img[src*="26a1.svg"]') ||
+            []),
+        ]);
         // it is hard to find the :zap: emoij. Twitter uses images for that but has an alt text with the emoij
         // but there could be some control characters somewhere...somehow...no idea...
         // for that reason we check if there is any character with the zap char code in the alt string.
@@ -119,7 +128,7 @@ function battery(): void {
       setLightningData([
         {
           method: "lnurl",
-          recipient,
+          address: recipient,
           ...getOriginData(),
           icon: userData.imageUrl,
           name: userData.name,

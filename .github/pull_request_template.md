@@ -1,27 +1,34 @@
-#### Link this PR to an issue
-Fixes #ISSUE-NUMBER (eg. Fixes #147)
+### Describe the changes you have made in this PR
 
-#### Type of change
+_A clear and concise description of what you want to happen_
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
+### Link this PR to an issue [optional]
 
-#### Describe the changes you have made in this PR -
+Fixes _#ISSUE-NUMBER_
 
-#### Screenshots of the changes (If any) -
+### Type of change
 
-#### How Has This Been Tested?
+(Remove other not matching type)
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+- `fix`: Bug fix (non-breaking change which fixes an issue)
+- `feat`: New feature (non-breaking change which adds functionality)
+- `feat!`: Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- `docs`: Documentation update
 
-- [ ] Test A
-- [ ] Test B
+### Screenshots of the changes [optional]
 
+_Add screenshots to make your changes easier to understand. You can also add a video here._
 
-#### Checklist:
+### How has this been tested?
 
-- [ ] My code follows the style guidelines of this project and performed a self-review of my own code
-- [ ] New and existing tests pass locally with my changes
-- [ ] I have made corresponding changes to the documentation (If Any)
+_Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration_
+
+### Checklist
+
+- [ ] Self-review of changed code
+- [ ] Manual testing
+- [ ] Added automated tests where applicable
+- [ ] Update Docs & Guides
+- For UI-related changes
+- [ ] Darkmode
+- [ ] Responsive layout

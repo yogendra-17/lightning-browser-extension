@@ -1,45 +1,11 @@
 import browser, { Runtime } from "webextension-polyfill";
-import qs from "query-string";
-import shajs from "sha.js";
-import PubSub from "pubsub-js";
-
-import { Message, OriginData } from "../../types";
-import { SendPaymentResponse } from "../../extension/background-script/connectors/connector.interface";
+import { ABORT_PROMPT_ERROR } from "~/common/constants";
+import { base64DecodeUnicode } from "~/common/lib/string";
+import { ConnectorTransaction } from "~/extension/background-script/connectors/connector.interface";
+import type { DeferredPromise, OriginData, OriginDataInternal } from "~/types";
+import { createPromptTab, createPromptWindow } from "../utils/window";
 
 const utils = {
-  call: <T = Record<string, unknown>>(
-    type: string,
-    args?: Record<string, unknown>,
-    overwrites?: Record<string, unknown>
-  ) => {
-    return browser.runtime
-      .sendMessage({
-        application: "LBE",
-        prompt: true,
-        type: type,
-        args: args,
-        origin: { internal: true },
-        ...overwrites,
-      })
-      .then((response: { data: T; error?: string }) => {
-        if (response.error) {
-          throw new Error(response.error);
-        }
-        return response.data;
-      });
-  },
-  notify: (options: { title: string; message: string }) => {
-    const notification: browser.Notifications.CreateNotificationOptions = {
-      type: "basic",
-      iconUrl: "assets/icons/satsymbol-48.png",
-      ...options,
-    };
-
-    return browser.notifications.create(notification);
-  },
-  getHash: (str: string) => {
-    return shajs("sha256").update(str).digest("hex");
-  },
   base64ToHex: (str: string) => {
     const hex = [];
     for (
@@ -73,90 +39,123 @@ const utils = {
   stringToUint8Array: (str: string) => {
     return Uint8Array.from(str, (x) => x.charCodeAt(0));
   },
-  publishPaymentNotification: (
-    message: Message,
-    paymentRequestDetails: PaymentRequestDetails,
-    response: SendPaymentResponse
-  ) => {
-    let status = "success"; // default. let's hope for success
-    if ("error" in response) {
-      status = "failed";
-    }
-    PubSub.publish(`ln.sendPayment.${status}`, {
-      response,
-      paymentRequestDetails,
-      origin: message.origin,
-    });
+  deferredPromise: (): DeferredPromise => {
+    let resolve: DeferredPromise["resolve"];
+    let reject: DeferredPromise["reject"];
+    const promise = new Promise<void>(
+      (innerResolve: () => void, innerReject: () => void) => {
+        resolve = innerResolve;
+        reject = innerReject;
+      }
+    );
+    return { promise, resolve, reject };
   },
   openPage: (page: string) => {
     browser.tabs.create({ url: browser.runtime.getURL(page) });
   },
+  redirectPage: (page: string) => {
+    browser.tabs.update({ url: browser.runtime.getURL(page) });
+  },
   openUrl: (url: string) => {
     browser.tabs.create({ url });
   },
-  openPrompt: <Type>(message: {
+  openPrompt: async <Type>(message: {
     args: Record<string, unknown>;
-    origin: OriginData;
-    type: string;
+    origin: OriginData | OriginDataInternal;
+    action: string;
   }): Promise<{ data: Type }> => {
-    const urlParams = qs.stringify({
-      args: JSON.stringify(message.args),
-      origin: JSON.stringify(message.origin),
-      type: message.type,
-    });
+    const urlParams = new URLSearchParams();
+    // passing on the message args to the prompt if present
+    if (message.args) {
+      urlParams.set("args", JSON.stringify(message.args));
+    }
+    // passing on the message origin to the prompt if present
+    if (message.origin) {
+      urlParams.set("origin", JSON.stringify(message.origin));
+    }
+    // action must always be present, this is used to route the request
+    urlParams.set("action", message.action);
+
+    const url = `${browser.runtime.getURL(
+      "prompt.html"
+    )}?${urlParams.toString()}`;
+
+    // Window APIs might not be available on mobile browsers
+    // on iOS window APIs are available, but `windows.create` is not
+    const useWindow = !!(browser.windows && browser.windows.create);
+
+    // Either API yields a tabId
+    const tabId = useWindow
+      ? await createPromptWindow(url)
+      : await createPromptTab(url);
 
     return new Promise((resolve, reject) => {
-      browser.windows
-        .create({
-          url: `${browser.runtime.getURL("prompt.html")}?${urlParams}`,
-          type: "popup",
-          width: 400,
-          height: 600,
-        })
-        .then((window) => {
-          let tabId: number | undefined;
-          if (window.tabs) {
-            tabId = window.tabs[0].id;
+      const onMessageListener = (
+        responseMessage: {
+          response?: unknown;
+          error?: string;
+          data: Type;
+        },
+        sender: Runtime.MessageSender
+      ) => {
+        if (
+          responseMessage &&
+          responseMessage.response &&
+          sender.tab &&
+          sender.tab.id === tabId &&
+          sender.tab.windowId
+        ) {
+          // Remove the event listener as we are about to close the tab
+          browser.tabs.onRemoved.removeListener(onRemovedListener);
+
+          // Use window APIs for removing the window as Opera doesn't
+          // close the window if you remove the last tab (e.g. in popups)
+          let closePromise;
+          if (useWindow) {
+            closePromise = browser.windows.remove(sender.tab.windowId);
+          } else {
+            closePromise = browser.tabs.remove(tabId);
           }
 
-          const onMessageListener = (
-            responseMessage: {
-              response?: unknown;
-              error?: string;
-              data: Type;
-            },
-            sender: Runtime.MessageSender
-          ) => {
-            if (
-              responseMessage &&
-              responseMessage.response &&
-              sender.tab &&
-              sender.tab.id === tabId
-            ) {
-              browser.tabs.onRemoved.removeListener(onRemovedListener);
-              if (sender.tab.windowId) {
-                return browser.windows.remove(sender.tab.windowId).then(() => {
-                  if (responseMessage.error) {
-                    return reject(new Error(responseMessage.error));
-                  } else {
-                    return resolve(responseMessage);
-                  }
-                });
-              }
+          return closePromise.then(() => {
+            // in the future actual "remove" (closing prompt) will be moved to component for i.e. budget flow
+            // https://github.com/getAlby/lightning-browser-extension/issues/1197
+            if (responseMessage.error) {
+              return reject(new Error(responseMessage.error));
+            } else {
+              return resolve(responseMessage);
             }
-          };
+          });
+        }
+      };
 
-          const onRemovedListener = (tid: number) => {
-            if (tabId === tid) {
-              browser.runtime.onMessage.removeListener(onMessageListener);
-              reject(new Error("Prompt was closed"));
-            }
-          };
+      const onRemovedListener = (tid: number) => {
+        if (tabId === tid) {
+          browser.runtime.onMessage.removeListener(onMessageListener);
+          reject(new Error(ABORT_PROMPT_ERROR));
+        }
+      };
 
-          browser.runtime.onMessage.addListener(onMessageListener);
-          browser.tabs.onRemoved.addListener(onRemovedListener);
-        });
+      browser.runtime.onMessage.addListener(onMessageListener);
+      browser.tabs.onRemoved.addListener(onRemovedListener);
     });
+  },
+
+  getBoostagramFromInvoiceCustomRecords: (
+    custom_records: ConnectorTransaction["custom_records"] | undefined
+  ) => {
+    try {
+      let boostagramDecoded: string | undefined;
+      const boostagram = custom_records?.[7629169];
+      if (boostagram) {
+        boostagramDecoded = base64DecodeUnicode(boostagram);
+      }
+
+      return boostagramDecoded ? JSON.parse(boostagramDecoded) : undefined;
+    } catch (e) {
+      console.error(e);
+      return;
+    }
   },
 };
 

@@ -1,0 +1,446 @@
+{
+  "translation": {
+    "welcome": {
+      "set_password": {
+        "choose_password": {
+          "label": "ロック解除パスコードを選択："
+        },
+        "confirm_password": {
+          "label": "正しく入力されているか確認しよう："
+        },
+        "errors": {
+          "mismatched_password": "パスコードが一致しませんでした。",
+          "enter_password": "パスコードを入力してください。",
+          "confirm_password": "確認用パスコードを入力してください。"
+        }
+      },
+      "test_connection": {
+        "ready": "すごいね、準備万端だ！",
+        "initializing": "アカウントを作成中です。少々お待ちください…",
+        "connection_error": "接続エラー",
+        "review_connection_details": "接続情報を確認してください。",
+        "connection_taking_long": "接続に時間がかかっています…設定は正しいですか？ノードにアクセス可能か確認してください。",
+        "contact_support": "サポートが必要な場合は support@getalby.com までご連絡ください。",
+        "actions": {
+          "delete_edit_account": "無効なアカウントを削除して再編集"
+        }
+      },
+      "pin_extension": {
+        "title": "Alby拡張機能を固定",
+        "description": "もうすぐです。Albyを便利に使うには、拡張機能をブラウザのツールバーに忘れずに固定してください：",
+        "explanation": "1. ブラウザの右上にある<0/>をクリックします。<1/>2. Albyを見つけてクリックし、ツールバーに固定します。<1/>3. 以上です。Albyにアクセスするには、<2/>アイコンをクリックします。",
+        "next_btn": "Albyを始めよう！{{icon}}"
+      }
+    },
+    "choose_path": {
+      "alby": {
+        "title": "Albyアカウント"
+      },
+      "other": {
+        "title": "その他のウォレット"
+      }
+    },
+    "alby": {
+      "pre_connect": {
+        "set_password": {
+          "choose_password": {
+            "label": "パスワード"
+          },
+          "confirm_password": {
+            "label": "パスワードを確認"
+          },
+          "errors": {
+            "enter_password": "パスワードを入力してください。",
+            "confirm_password": "パスワードを確認してください。",
+            "mismatched_password": "パスワードが一致しません。"
+          }
+        }
+      }
+    },
+    "choose_connector": {
+      "lnd": {
+        "title": "LND",
+        "page": {
+          "title": "LNDノードに接続",
+          "description": "ノードのURLと、readとsendのパーミッションを持つmacaroon（例：admin.macaroon）が必要です"
+        },
+        "url": {
+          "label": "REST APIのホストとポート",
+          "placeholder": "https://ノードのURL:8080"
+        },
+        "macaroon": {
+          "label": "macaroon（HEX形式）"
+        },
+        "drag_and_drop": "macaroonをここにドラッグ・アンド・ドロップするか、<0>ファイルを選択</0>",
+        "errors": {
+          "connection_failed": "接続に失敗しました。LNDの認証情報は正しいですか？"
+        }
+      },
+      "umbrel_lightning_node": {
+        "title": "Lightning Node"
+      },
+      "lnc": {
+        "title": "Lightning Terminal (LNC)",
+        "pairing_phrase": {
+          "label": "あなたのペアリング・フレーズ ",
+          "placeholder": "シークレット・stack sats・フレーズ"
+        }
+      },
+      "lndhub_go": {
+        "title": "LNDHub",
+        "page": {
+          "title": "LNDHubに接続",
+          "description": "LNDHubの認証URIをここに入力するか、ウェブカメラでQRコードをスキャンしてください。"
+        },
+        "uri": {
+          "label": "LNDHubのエクスポートURI"
+        },
+        "errors": {
+          "invalid_uri": "無効なLNDHubのURI",
+          "connection_failed": "接続に失敗しました。LNDHubのURIは正しいですか？"
+        }
+      },
+      "lnbits": {
+        "page": {
+          "title": "<0>LNbits</0>に接続",
+          "instructions": "LNbitsで接続したいウォレットを選択し、それを開いてAPI Infoをクリックし、管理キーをコピーします。最後に以下へ貼り付けてください："
+        },
+        "admin_key": {
+          "label": "LNbitsの管理キー",
+          "placeholder": "32桁の管理キー"
+        },
+        "url": {
+          "label": "LNbitsのURL"
+        },
+        "errors": {
+          "connection_failed": "接続に失敗しました。正しいURLと管理キーを入力しましたか？"
+        },
+        "title": "LNbits"
+      },
+      "eclair": {
+        "page": {
+          "title": "<0>Eclair</0> に接続",
+          "instructions": "EclairのURLとパスワードが必要です。"
+        },
+        "password": {
+          "label": "Eclairのパスワード"
+        },
+        "url": {
+          "label": "EclairのURL",
+          "placeholder": "http://localhost:8080"
+        },
+        "title": "Eclair"
+      },
+      "citadel": {
+        "page": {
+          "title": "<0>Citadel</0>ノードに接続",
+          "instructions": "現在のところ、2要素認証（2FA）が有効になっている場合は機能しません。"
+        },
+        "password": {
+          "label": "Citadelのパスワード"
+        },
+        "url": {
+          "label": "CitadelのURL",
+          "placeholder": "http://citadel.local"
+        },
+        "title": "Citadel"
+      },
+      "umbrel": {
+        "page": {
+          "title": "<0>Umbrel</0>ノードに接続",
+          "instructions": "1. Lightning Nodeのダッシュボードで<0>Connect wallet</0>をクリックします。<1/>2.<0>REST(Tor)</0>または<0>REST(Local Network)</0>モードを選択します。<1/>3.<0>lndconnect URL</0>をコピーし、以下に貼り付けます。"
+        },
+        "rest_url": {
+          "label": "lndconnectのREST URL",
+          "placeholder": "lndconnect://yournode:8080?..."
+        },
+        "title": "Umbrel"
+      },
+      "mynode": {
+        "page": {
+          "title": "<0>myNode</0>に接続",
+          "instructions": "myNode のホームページで<0>lightning</0>サービスの<0>Wallet</0>ボタンをクリックします。<1/>次に<0>Status</0>タブの下にある<0>Pair Wallet</0>ボタンをクリックします。パスワードを聞かれた場合は入力します。<1/>ドロップダウンメニューを選択し、ペアリングのオプションを選択します。<0>lightning（REST + ローカルIP）</0>接続、または<0>ライトニング（REST + Tor）</0>接続のいずれかを使用できます。"
+        },
+        "rest_url": {
+          "label": "lndconnectのREST URL",
+          "placeholder": "lndconnect://yournode:8080?..."
+        },
+        "title": "myNode"
+      },
+      "startos": {
+        "rest_url": {
+          "label": "lndconnectのREST URL",
+          "placeholder": "lndconnect://yournode:8080?..."
+        },
+        "title": "StartOS",
+        "page": {
+          "title": "<0>StartOSサーバー</0>に接続",
+          "instructions": "StartOSダッシュボードで<0>Lightning Network Daemon</0>サービスをクリックします。<1/><0>Properties</0>タブを選択します。<1/>ここで<0>LND Connect REST URL</0>をコピーします。"
+        }
+      },
+      "raspiblitz": {
+        "page": {
+          "title": "<0>RaspiBlitz</0>ノードに接続",
+          "instructions2": "(管理) <0>macaroon</0> を下の入力欄にコピーしてください。",
+          "instructions1": "手順:<1/> 1. <0>Raspiblitz</0>に<0>SSH</0> でログイン<1/>2. リストから<0>Connect Apps & Show Credentials</0>を選択<1/><0/>3. <0>Connect Alby to this node</0>を選択<1/>4. クレデンシャルを表示するために<0>OK</0>を押下し<1/><1/><0>REST API host</0>かTorに接続するために<0>.onion</0> アドレスを下の入力欄にコピー&ペースト"
+        },
+        "rest_api_host": {
+          "label": "REST APIのホスト",
+          "placeholder": "your-node-onion-address:port"
+        },
+        "title": "RaspiBlitz"
+      },
+      "blink": {
+        "page": {
+          "title": "<0>Blink Wallet</0>に接続"
+        },
+        "title": "Blink Wallet"
+      },
+      "title": "ライトニング・ウォレットを接続",
+      "description": "外部のライトニング・ウォレットまたはノードに接続",
+      "bitcoin_jungle": {
+        "title": "Bitcoin Jungle Wallet",
+        "page": {
+          "title": "<0>Bitcoin Jungle Wallet</0>に接続"
+        }
+      },
+      "btcpay": {
+        "config": {
+          "label": "コンフィグデータ"
+        },
+        "errors": {
+          "connection_failed": "接続に失敗しました。BTCPayの接続URLは正しく、アクセス可能ですか？"
+        },
+        "title": "BTCPay Server"
+      },
+      "commando": {
+        "page": {
+          "title": "Core Lightningノードに接続",
+          "instructions": "Core Lightningのバージョンが0.12.0以降であること、commandoプラグインが動作していること、ノードがライトニング・ネットワーク経由でアクセス可能であることを確認してください。'lightning-cli commando-rune' を実行してルーンを作成します。"
+        },
+        "host": {
+          "label": "ホスト"
+        },
+        "config": {
+          "label": "コンフィグデータ",
+          "placeholder": "config=https://your-btc-pay.org/lnd-config/212121/lnd.config"
+        },
+        "errors": {
+          "connection_failed": "接続に失敗しました。Core Lightningノードがオンラインであり、commandoプラグインを使用していますか？"
+        },
+        "title": "Core Lightning",
+        "pubkey": {
+          "label": "公開鍵"
+        },
+        "port": {
+          "label": "ポート"
+        },
+        "proxy": {
+          "label": "WebSocketプロキシ"
+        },
+        "rune": {
+          "label": "ルーン"
+        },
+        "privKey": {
+          "label": "ローカルの秘密鍵（自動生成）"
+        }
+      }
+    },
+    "accounts": {
+      "account_view": {
+        "export": {
+          "waiting": "LndHubデータを取得中...",
+          "your_ln_address": "あなたのライトニング・アドレス：",
+          "screen_reader": "アカウント情報をエクスポート",
+          "export_uri": "LNDHubの認証URl",
+          "scan_qr": "QRCコードをスキャンして、このウォレットをZeusまたはBlueWalletにインポートする。"
+        },
+        "name": {
+          "title": "表示名",
+          "placeholder": "アカウントの表示名"
+        },
+        "mnemonic": {
+          "backup": {
+            "button": "リカバリーフレーズを表示",
+            "description": "新しいデバイスでマスターキーを復元したり、アカウントにアクセスできなくなった場合に備えて、リカバリーフレーズは必ずメモしてください。",
+            "protocols": {
+              "nostr": "Nostr"
+            },
+            "save": "マスターキーを保存"
+          },
+          "existing_nostr_key_notice": "ℹ️ このアカウントにはすでにnostr秘密鍵が設定されているため、このマスターキーから生成されることはありません。Nostr鍵はアカウント設定から管理できます。",
+          "generate": {
+            "description": "マスターキーは、Nostr、Bitcoinのベースレイヤー、LNURL-Authのようなプロトコルとの連携を可能にします。",
+            "title": "新しいマスターキーの生成",
+            "button": "マスターキーの生成"
+          },
+          "import": {
+            "title": "マスターキーをインポート",
+            "description": "リカバリーフレーズを使ってマスターキーをAlbyにインポートする。",
+            "button": "マスターキーをインポート"
+          },
+          "lnurl": {
+            "use_mnemonic": "ライトニング搭載アプリへのログインにマスターキーを使う（LNURL Auth）",
+            "title": "ライトニングでログイン"
+          },
+          "saved": "マスターキーの暗号化と保存に成功しました。"
+        },
+        "nostr": {
+          "hint": "は、検閲に強いソーシャル・ネットワークを作ることを目的とした、シンプルでオープンなプロトコルです。Nostrは秘密鍵で動作します。何かをポストするには、自分の秘密鍵で署名し、複数のリレーに送信します。Albyを使うことで、Nostrの秘密鍵を安全に管理することができます。多くのNostrアプリが、Albyブラウザ拡張機能に対応しています。",
+          "settings": {
+            "label": "Nostr設定",
+            "title": "Nostr設定",
+            "remove": "現在の鍵を削除する",
+            "no_secret_key": "💡マスターキーがまだありません。<0>ここをクリック</0></div>してマスターキーを作成し、Nostrキーを派生させてください。",
+            "imported_key_warning": "現在インポートされたかランダムに生成されたNostrキーを使用しています。あなたのNostr秘密鍵はリカバリーフレーズで復旧できません。よって、Nostr秘密鍵を個別にバックアップすることを忘れないでください。",
+            "derive": "マスターキーから導出する",
+            "can_restore": "✅ Nostrキーはマスターキーから導出されています"
+          },
+          "title": "Nostr",
+          "setup": {
+            "description2": "Albyで作成されたすべてのNostrアカウントには、<0>リカバリーフレーズ</0>が付属しています。これはNostrの秘密鍵を復旧するための12個の単語です。",
+            "new": {
+              "label": "新しいNostrアカウントを作成する",
+              "description": "新しいNostr鍵のペアでマスター鍵を生成する。"
+            },
+            "title": "Nostrキーのセットアップ",
+            "description": "新しいNostrアカウント（秘密鍵と公開鍵のペア）を作成するか、既存のアカウントをインポートするかを選択します。"
+          },
+          "private_key": {
+            "successfully_removed": "Nostr秘密鍵の削除に成功しました",
+            "label": "Nostr秘密鍵",
+            "failed_to_remove": "入力されたアカウントネームは一致しませんでした。Nostr秘密鍵は戻されました。",
+            "title": "Nostr秘密鍵の管理",
+            "success": "Nostr秘密鍵は暗号化して保存されました",
+            "subtitle": "Nostr秘密鍵をペーストするか新しい鍵を生成する<0>もっと詳しく知る</0>"
+          },
+          "generate_keys": {
+            "title": "新しいNostrキーを作成",
+            "actions": {
+              "random_keys": "鍵をランダムに作成する",
+              "derived_keys": "アカウントから鍵を導出する"
+            },
+            "screen_reader": "あなたのアカウントのために新しいNostrキーを生成する",
+            "hint": "ランダムに鍵を作成するか、このアカウント詳細から鍵を導出できます。 <0>もっと詳しく知る »</0>"
+          },
+          "public_key": {
+            "label": "Nostr公開鍵"
+          },
+          "actions": {
+            "generate": "新しい鍵を作成する"
+          },
+          "errors": {
+            "failed_to_load": "Nostrキーをロードできませんでした。有効なNostキーですか？"
+          }
+        },
+        "no_mnemonic_hint": "💡 マスターキーがまだありません。 <0>こちらをクリック</0></div>してマスターキーを作成し、これらの設定を解除してください。",
+        "network": {
+          "options": {
+            "bitcoin": "Mainnet",
+            "testnet": "Testnet",
+            "regtest": "Regtest"
+          }
+        }
+      }
+    },
+    "home": {
+      "default_view": {
+        "is_blocked_hint": "Alby は現在{{host}}で無効になっています",
+        "block_removed": "{{host}}を有効にしました。ウェブサイトを再度読み込んでください。"
+      },
+      "actions": {
+        "send_satoshis": "⚡️ サトシを送る ⚡️",
+        "enable_now": "今すぐ有効化"
+      }
+    },
+    "distributions": {
+      "umbrel": {
+        "name": "Umbrel"
+      },
+      "citadel": {
+        "name": "Citadel"
+      },
+      "btcpay": {
+        "name": "BTCPay"
+      },
+      "raspiblitz": {
+        "name": "Raspiblitz"
+      },
+      "mynode": {
+        "name": "myNode"
+      },
+      "startos": {
+        "name": "StartOS"
+      },
+      "description": "接続したい{{name}}アプリを選択してください",
+      "title": "{{name}}に接続"
+    }
+  },
+  "permissions": {
+    "lnc": {
+      "sendtoroute": "指定したルートで支払いを行う。",
+      "addinvoice": "新しいインボイスを作成。",
+      "settleinvoice": "受け付けたインボイスを決済する。",
+      "addholdinvoice": "新しいHODLインボイスを作成する。",
+      "decodepayreq": "支払いリクエスト文字列をデコードする。",
+      "queryroutes": "可能なルートを照会する。",
+      "listpeers": "現在アクティブなピアの一覧を取得する。",
+      "lookupinvoice": "インボイス情報を確認。",
+      "verifymessage": "メッセージに対する署名を検証する。",
+      "getnodeinfo": "ノードのチャンネル情報を取得する。",
+      "listpayments": "支払いの一覧を取得する。",
+      "getnetworkinfo": "既知のチャンネルグラフの基本的な統計を取得する。",
+      "gettransactions": "ウォレットに関する全ての取引情報を取得する。",
+      "getchaninfo": "特定のチャンネルのネットワークアナウンスを取得します。",
+      "estimatefee": "取引の手数料率と合計手数料を見積もる。",
+      "disconnectpeer": "リモートピアから切断する。",
+      "connectpeer": "リモートピアとの接続を確立する。",
+      "openchannel": "新しいチャンネルを開く。",
+      "walletbalance": "未使用の取引出力(UTXO)を取得。",
+      "channelbalance": "開かれた全てのチャンネルの合計資金のレポートを取得。",
+      "listchannels": "開いている全てのチャンネルの説明を取得。",
+      "getinfo": "ノードの情報を取得。",
+      "listinvoices": "全てのインボイス一覧を取得。"
+    },
+    "lnd": {
+      "addinvoice": "新しい請求書の作成。",
+      "decodepayreq": "支払いリクエスト文字列をデコードする。",
+      "settleinvoice": "承認した請求を決済。",
+      "addholdinvoice": "新しい保留付き請求(HODL invoice)の作成。",
+      "verifymessage": "メッセージの署名を検証する。",
+      "lookupinvoice": "インボイス情報を確認。",
+      "listpeers": "現在アクティブなピアの一覧を取得。",
+      "gettransactions": "このウォレットに関連する全ての取引情報の一覧を取得。",
+      "estimatefee": "取引の手数料率と合計手数料を見積もる。",
+      "sendtoroute": "指定されたルートを利用して支払う。",
+      "queryroutes": "使用可能なルートを問い合わせる。",
+      "getnodeinfo": "ノートのチャンネル情報を取得。",
+      "getnetworkinfo": "既知のチャンネルグラフの基本的な統計を取得。",
+      "getchaninfo": "特定のチャンネルのネットワークアナウンスを取得。",
+      "connectpeer": "リモートピアとの接続を確立する。",
+      "openchannel": "新しいチャンネルを開く。",
+      "channelbalance": "開かれた全てのチャンネルの合計資金のレポートを取得。",
+      "listchannels": "開いている全てのチャンネルの説明を取得。",
+      "getinfo": "ノードの情報を取得。",
+      "walletbalance": "未使用の取引出力(UTXO)を取得。",
+      "listpayments": "全ての支払いの一覧を取得。",
+      "disconnectpeer": "リモートピアから切断する。",
+      "listinvoices": "全ての請求書の一覧を取得。"
+    },
+    "commando": {
+      "listsendpays": "全てのsendpayコマンドの状態を取得。",
+      "listpeers": "接続している、もしくは開いているチャンネルを持つノードを一覧表示。",
+      "listoffers": "全てのOffer、もしくは特定のOfferを一覧表示。",
+      "listinvoices": "全ての請求書の状態を取得。",
+      "listfunds": "利用可能な全ての資金を一覧表示。",
+      "listforwards": "転送を試みた全てのHTLCを一覧表示。",
+      "getinfo": "ノードの概要を取得。",
+      "signmessage": "このノードから署名を作成。",
+      "pay": "BOLT11の請求書に支払う。",
+      "offer": "Offerを作成。",
+      "listtransactions": "ウォレット内で追跡されている取引を一覧表示。",
+      "listpays": "全てのpayコマンドの状態を取得する。",
+      "getroute": "ライトニングノードへの支払いに最適なルートを見つける。"
+    }
+  }
+}

@@ -1,16 +1,22 @@
+import fetchAdapter from "@vespaiach/axios-fetch-adapter";
 import axios from "axios";
-import sha256 from "crypto-js/sha256";
-import Hex from "crypto-js/enc-hex";
-import { parsePaymentRequest } from "invoices";
+import lightningPayReq from "bolt11-signet";
+import { isLNURLDetailsError } from "~/common/utils/typeHelpers";
+import {
+  LNURLAuthServiceResponse,
+  LNURLDetails,
+  LNURLError,
+  LNURLPaymentInfo,
+} from "~/types";
 
-import { LNURLDetails, LNURLPaymentInfo } from "../../types";
 import { bech32Decode } from "../utils/helpers";
 
 const fromInternetIdentifier = (address: string) => {
   // email regex: https://emailregex.com/
+  // modified to allow _ in subdomains
   if (
     address.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-_0-9]+\.)+[a-zA-Z]{2,}))$/
     )
   ) {
     let [name, host] = address.split("@");
@@ -28,7 +34,7 @@ const normalizeLnurl = (lnurlString: string) => {
     const url = bech32Decode(lnurlString);
     return new URL(url);
   } catch (e) {
-    console.log("ignoring bech32 parsing error", e);
+    console.info("ignoring bech32 parsing error", e);
   }
 
   // maybe it's a lightning address?
@@ -45,6 +51,7 @@ const lnurl = {
   isLightningAddress(address: string) {
     return Boolean(fromInternetIdentifier(address));
   },
+
   findLnurl(text: string) {
     const stringToText = text.trim();
     let match;
@@ -61,53 +68,70 @@ const lnurl = {
 
     return null;
   },
-  async getDetails(lnurlString: string) {
+
+  async getDetails(lnurlString: string): Promise<LNURLError | LNURLDetails> {
     const url = normalizeLnurl(lnurlString);
-    let lnurlDetails = {} as LNURLDetails;
-    lnurlDetails.tag = url.searchParams.get("tag") as LNURLDetails["tag"];
-    if (lnurlDetails.tag === "login") {
-      lnurlDetails.k1 = url.searchParams.get("k1") || "";
-      lnurlDetails.action = url.searchParams.get("action") || undefined;
+    const searchParamsTag = url.searchParams.get("tag");
+    const searchParamsK1 = url.searchParams.get("k1");
+    const searchParamsAction = url.searchParams.get("action");
+
+    if (searchParamsTag && searchParamsTag === "login" && searchParamsK1) {
+      const lnurlAuthDetails: LNURLAuthServiceResponse = {
+        ...(searchParamsAction && { action: searchParamsAction }),
+        domain: url.hostname,
+        k1: searchParamsK1,
+        tag: searchParamsTag,
+        url: url.toString(),
+      };
+
+      return lnurlAuthDetails;
     } else {
       try {
-        const res = await axios.get(url.toString());
-        lnurlDetails = res.data;
-      } catch (e) {
-        throw new Error(
-          "Connection problem or invalid lnurl / lightning address."
+        const { data }: { data: LNURLDetails | LNURLError } = await axios.get(
+          url.toString(),
+          {
+            adapter: fetchAdapter,
+          }
         );
+
+        const lnurlDetails = data;
+
+        if (isLNURLDetailsError(lnurlDetails)) {
+          throw new Error(lnurlDetails.reason);
+        } else {
+          lnurlDetails.domain = url.hostname;
+          lnurlDetails.url = url.toString();
+        }
+
+        return lnurlDetails;
+      } catch (e) {
+        let error = "";
+        if (axios.isAxiosError(e)) {
+          error =
+            (e.response?.data as { reason?: string })?.reason || e.message;
+
+          if (this.isLightningAddress(lnurlString)) {
+            error = `This is not a valid lightning address. Either the address is invalid or it is using a different and unsupported protocol: ${error}`;
+          }
+        } else if (e instanceof Error) {
+          error = e.message;
+        }
+
+        throw new Error(error);
       }
     }
-    lnurlDetails.domain = url.hostname;
-    lnurlDetails.url = url;
-    return lnurlDetails;
   },
+
   verifyInvoice({
     paymentInfo,
-    payerdata,
-    metadata,
     amount,
   }: {
     paymentInfo: LNURLPaymentInfo;
-    payerdata: undefined | Record<string, string>;
-    metadata: string;
     amount: number;
   }) {
-    const paymentRequestDetails = parsePaymentRequest({
-      request: paymentInfo.pr,
-    });
-    let metadataHash = "";
-    try {
-      const dataToHash = payerdata
-        ? metadata + JSON.stringify(payerdata)
-        : metadata;
-      metadataHash = sha256(dataToHash).toString(Hex);
-    } catch (e) {
-      console.error();
-    }
+    const paymentRequestDetails = lightningPayReq.decode(paymentInfo.pr);
     switch (true) {
-      case paymentRequestDetails.description_hash !== metadataHash: // LN WALLET Verifies that h tag (description_hash) in provided invoice is a hash of metadata string converted to byte array in UTF-8 encoding
-      case paymentRequestDetails.mtokens !== String(amount): // LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user
+      case paymentRequestDetails.millisatoshis !== String(amount): // LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user
       case paymentInfo.successAction &&
         !["url", "message", "aes"].includes(paymentInfo.successAction.tag): // If successAction is not null: LN WALLET makes sure that tag value of is of supported type, aborts a payment otherwise
         return false;
